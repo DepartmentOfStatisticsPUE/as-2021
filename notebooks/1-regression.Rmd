@@ -127,3 +127,8 @@ Standard asumptions of linear regression:
 
 
 
+```{r}
+beer <- beer %>% mutate(month = factor(month(date)))
+mod1 <- fixest::fenegbin(fml = count ~ place_type + week_day*month | id, data = beer)
+```
+

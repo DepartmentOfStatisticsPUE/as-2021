@@ -1,5 +1,22 @@
-"0","library(lubridate)
+"0","# install packages(c(""readxl"", ""dplyr"", ""lubridate""))"
+"0","library(readxl)"
+"0","library(dplyr)"
+"2","package ‘dplyr’ was built under R version 3.6.2"
+"2","
+Attaching package: ‘dplyr’
+
 "
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(lubridate) ## package to deal with dates"
 "2","package ‘lubridate’ was built under R version 3.6.2"
 "2","
 Attaching package: ‘lubridate’
