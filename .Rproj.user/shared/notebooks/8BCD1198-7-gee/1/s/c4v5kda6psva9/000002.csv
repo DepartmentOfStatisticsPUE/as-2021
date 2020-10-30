@@ -1,0 +1,8 @@
+"0","```r
+#install.packages(c(\"geepack\", \"MuMIn\"))
+library(geepack) ## to estimate GEE models
+library(MuMIn) ## selection of GEE models -- we need to choose which R matrix to apply
+library(readxl) ## read excel files library 
+library(lubridate)
+library(tidyverse)
+```"

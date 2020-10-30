@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1604044431597.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E6066C15",
+    "lastKnownWriteTime" : 1604060956,
+    "last_content_update" : 1604060956587,
+    "path" : "~/git/dydaktyka/applied-stats/notebooks/1-regression.Rmd",
+    "project_path" : "notebooks/1-regression.Rmd",
+    "properties" : {
+        "chunk_output_type" : "inline",
+        "cursorPosition" : "120,41",
+        "scrollLine" : "113",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
