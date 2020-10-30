@@ -125,10 +125,3 @@ Standard asumptions of linear regression:
 - continous Y variable -- count data -- linear regression is a bad choice, we should go for generalized linear models (GLM)
 - observations are not correlated / independent from each other
 
-
-
-```{r}
-beer <- beer %>% mutate(month = factor(month(date)))
-mod1 <- fixest::fenegbin(fml = count ~ place_type + week_day*month | id, data = beer)
-```
-
