@@ -125,3 +125,9 @@ Standard asumptions of linear regression:
 - continous Y variable -- count data -- linear regression is a bad choice, we should go for generalized linear models (GLM)
 - observations are not correlated / independent from each other
 
+```{r}
+plot(model3)
+#barplot(table(beer$count))
+```
+
+

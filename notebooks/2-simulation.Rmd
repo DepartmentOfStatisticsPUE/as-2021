@@ -1,0 +1,108 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+install.packages("texreg")
+library(texreg)
+```
+
+Papers:
+
+- you submit a paper
+- the paper goes to editors, and decision may be as follows:
+    + desk reject -- not suitable for the journal (no review)
+    + paper is send to reviewer (2-6 reviewers)
+      + accept
+      + minor corrections -- revise and resubmit
+      + major corrections -- revise and resubmit
+      + rejection 
+
+When we should use simulation studies:
+
+- we propose a new method and we would like to show when it works and when it fails; but we may be intested in properties of such methods (what is variance, what are the standard errors of parameters, i.e. coefficients)
+- we would like to simulate some population (e.g. agent-based models)
+- we would like to see if given software or my own codes actually works
+
+$$
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_3 + \epsilon; \quad \epsilon \sim N(0, \sigma)
+$$
+
+We may use pseudo-random numbers -- use set.seed to reproduce results!!!
+
+```{r}
+set.seed(123) ## i'm specifying starting point for the algorithm that generates the data/numbers
+n <- 10000 ## how many numbers we will be generating
+epsilon <- rnorm(n = n, mean = 0, sd = 2) ## random numbers from N(0, 2)
+x1 <- rnorm(n = n, mean = 10, sd = 3) ## pseudo-random numbers from N(10, 3)
+c(mean = mean(x1), sd = sd(x1))
+x2 <- rnorm(n = n, mean = -4, sd = 1) ## pseudo-random numbers from N(-4, 1)
+y <- 0.5 - 2*x1 + 5*x2 + epsilon ## beta0 = 0.5, beta1 = -2, beta2 = 5
+head(y)
+y[10] <- y[10]+50 
+y[100] <- y[100]-50 
+pairs(cbind(y, x1, x2))
+```
+
+
+```{r}
+data_for_model <- data.frame(y, x1, x2)
+head(data_for_model, 2)
+```
+
+
+```{r}
+m1 <- lm(formula = y ~ x1 + x2, data = data_for_model)
+m2 <- lm(formula = y ~ x1, data = data_for_model)
+summary(m1)
+```
+
+```{r}
+confint(m1, level = 0.95)
+```
+
+$$
+y = 0.615112 -1.995956*x1 +  5.039974*x2
+$$
+
+```{r}
+screenreg(list(model1 = m1, model2 = m2), single.row = T)
+```
+
+On sample data we have predict 100% all the cases
+but, if we use new data (test data) -- we correctly predict 50% of cases
+
+
+Visual inspection of the model -- why?
+
+- residuals vs fitted -- it is used to verify whether assumptions of linear model are met, in particular we verify the residuals and assumption of homoskedasticity (variance is stable)
+- normal QQ -- is the plot to verify assumption about normal distribution of residuals
+- scale-location plot -- it measures the same thing as the fist plot but it is more sensitive to not meeting the assumptions of LM
+- residuals vs leverage -- this plot is used to look for outliers and influential observations
+    + outlier have high residual but low leverage
+    + influential observeration have high leverage but low residual
+
+```{r}
+plot(m1)
+```
+
+
+What to do if our assumptions are not met or our data have observations that are skewed or they are different from other observations but they are not errors 
+
++ use logarithm -> instead of y use log(y) -> WARNING: interpretation will change!!!
+
+$$
+\begin{cases}
+y & = e^{\beta_0 + \beta_1x_1} \\
+log(y) & = \beta_0 + \beta_1x_1
+\end{cases}
+$$
+
++ use robust models (`MASS::rlm`) -> which are not effected by outliers/influential observations
++ use robust standard errors --> that are robust to not meeting assumptions such as hetero or correlation of observations
++ use different model (maybe non-linear model such as GLM, GAM, ML)
+
+
+
+
