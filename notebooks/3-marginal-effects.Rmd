@@ -1,0 +1,100 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+install.packages("margins")
+library(margins)
+```
+
+Assume the following model:
+
+$$
+Y_i  = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \beta_3 X_{1i} X_{2i}
+$$
+
+Margianl effect of $X_1$ would be
+
+$$
+\frac{\partial Y_i}{\partial X_{1i}} = \beta_1 + \beta_3 X_{2i}
+$$
+
+In general, we have three methods: 
+
++ Marginal effects at representative values (MERs), $X_{2i} = 2$
+
+$$
+MER = \frac{\partial Y_i}{\partial X_{1i}} = \beta_1 + \beta_3 X_{2i} = \beta_1 + \beta_3 * 2
+$$
+
++ Marginal effect at means (MEMs), $X_{2i} = \bar{X}_{2i} = 25.34$
+
+$$
+MEM = \frac{\partial Y_i}{\partial X_{1i}} = \beta_1 + \beta_3 X_{2i} = \beta_1 + \beta_3 * \bar{X}_{2i} = \beta_1 + \beta_3 * 25.34
+$$
+
++ Average marginal effect (AMEs)
+
+$$
+AME = \frac{\sum_i \frac{\partial Y_i}{\partial X_{1i}}}{n} = \frac{\sum_i \beta_1 + \beta_3 * X_{2i}}{n}
+$$
+
+```{r}
+mtcars
+```
+
+Let's build a simple linear regression model based on mtcars dataset
+
+```{r}
+model1 <- lm(formula = mpg ~ cyl + hp + wt + am, data = mtcars)
+summary(model1)
+```
+
+$$
+mpg = 36.14  -0.75 * cyl - 0.03*hp - 2.61*wt + 1.48*am
+$$
+
+```{r}
+model1_margins <- margins(model = model1)
+summary(model1_margins)
+```
+
+We would like to get marginal effects for am = 1 or am = 0 or cyl = 6
+
+```{r}
+margins(model = model1, at = list(am = c(0, 1)))
+```
+
+
+```{r}
+margins(model = model1, at = list(am = c(0, 1), cyl = 6))
+```
+
+We update model 1 by including interaction between am (automatic) and wt (weight)
+
+X1 * X2 = X1 + X2 + X1:X2
+
+```{r}
+#model2 <- lm(formula = mpg ~ cyl + hp + wt + am + am*wt, data = mtcars)
+model2 <- update(model1, . ~ . +  am*wt) ## . ~ . + am*wt 
+summary(model2)
+```
+
+$$
+Y_i  = \beta_0 + ... + \beta_3 WT + \beta_4 AM + \beta_5 WT*AM
+$$
+
+```{r}
+model2_margins <- margins(model = model2)
+summary(model1_margins)
+summary(model2_margins)
+```
+
+Compare cars with am = 0 and am = 1
+
+```{r}
+model2_margins_at <- margins(model = model2, at = list(am = c(0,1)))
+model2_margins_at
+```
+

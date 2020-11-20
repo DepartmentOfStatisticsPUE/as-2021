@@ -1,0 +1,37 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Centering variables for regression
+
+```{r}
+model1 <- lm(formula = mpg ~ hp + wt, data = mtcars)
+summary(model1)
+```
+
+To obtain intercept that may be interpreted we may use the following transformation of Xs
+
+$$
+Z_{1i} = X_{1i} - \bar{X}_{1i}
+$$
+
+Standardizing  variables 
+
+$$
+Z_{1i} = \frac{X_{1i} - \bar{X}_{1i}}{\sigma_X}
+$$
+
+
+```{r}
+mtcars$z_hp <- scale(mtcars$hp, center = TRUE, scale = FALSE)
+mtcars$z_wt <- scale(mtcars$wt, center = TRUE, scale = FALSE)
+
+model2 <- lm(formula = mpg ~ z_hp + z_wt, data = mtcars)
+
+cat("====== model 1 ======\n")
+coef(summary(model1))
+cat("====== model 2 ======\n")
+coef(summary(model2))
+```
+

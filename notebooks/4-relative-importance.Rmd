@@ -1,0 +1,82 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Relative importance of regressors (this is only for linear models)
+
+```{r}
+install.packages("relaimpo")
+library(relaimpo)
+```
+
+```{r}
+model1 <- lm(formula = mpg ~ cyl + hp + wt + am, data = mtcars)
+summary(model1)
+```
+
+Metric first
+
++ y ~ 1
++ y ~ x1
++ y ~ x2
++ y ~ x3
++ y ~ x4
+
+
+```{r}
+calc.relimp(object = model1, type = "first", rela = FALSE) ## R2 with only single variable
+calc.relimp(object = model1, type = "first", rela = TRUE) ## R2 with only single variable
+```
+
+Metric last
+
+y ~ x1 + x2 + x3 + x4
+
+y ~ x1 + x2 + x3 // drop x4
+y ~ x1 + x2 + x4 // drop x3
+y ~ x1 + x3 + x4 // drop x2
+y ~ x2 + x3 + x4 // drop x1
+
+```{r}
+calc.relimp(object = model1, type = "last", rela = FALSE) 
+```
+
+```{r}
+m1_with_cyl <- lm(formula = mpg ~ cyl + hp + wt + am, data = mtcars)
+m1_without_cyl <- lm(formula = mpg ~ hp + wt + am, data = mtcars)
+
+summary(m1_with_cyl)$r.square
+summary(m1_without_cyl)$r.square
+```
+
+Method betasq -- standardized parameters
+
+```{r}
+calc.relimp(object = model1, type = "betasq", rela = FALSE) 
+```
+
+Method lmg (computer intensive method) -- 2^n - 1 combinations 
+
+X1, X2, X3
+
+y ~ x1 -> R^2
+y ~ x2
+y ~ x3
+y ~ x1 + x2
+y ~ x2 + x3
+y ~ x1 + x3
+y ~ x1 + x2 + x3
+
+```{r}
+2^10 - 1
+```
+
+
+```{r}
+calc.relimp(object = model1, type =  "lmg", rela = TRUE)
+```
+
+
+
+
